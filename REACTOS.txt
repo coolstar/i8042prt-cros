@@ -1,0 +1,1 @@
+Thanks to the ReactOS team for allowing me to base my project off their i8042prt driver. Without them, this wouldn't be possible :)
