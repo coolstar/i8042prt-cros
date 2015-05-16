@@ -1,0 +1,7 @@
+#define ERR_()
+#define WARN_()
+#define TRACE_()
+#define INFO_()
+#define DPRINT()
+#define DPRINT1()
+#define KdSystemDebugControl()

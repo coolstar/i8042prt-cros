@@ -1,0 +1,82 @@
+;
+; i8042prtcros.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class==Keyboard ; TODO: edit Class
+ClassGuid={4D36E96B-E325-11CE-BFC1-08002BE10318} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=i8042prtcros.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+i8042prtcros.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%i8042prtcros.DeviceDesc%=i8042prtcros_Device, ACPI\GGL0303 ; TODO: edit hw-id
+
+[i8042prtcros_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+i8042prtcros.sys
+
+;-------------- Service installation
+[i8042prtcros_Device.NT.Services]
+AddService = i8042prtcros,%SPSVCINST_ASSOCSERVICE%, i8042prtcros_Service_Inst
+
+; -------------- i8042prtcros driver install sections
+[i8042prtcros_Service_Inst]
+DisplayName    = %i8042prtcros.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\i8042prtcros.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- i8042prtcros_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+i8042prtcros_Device_CoInstaller_CopyFiles = 11
+
+[i8042prtcros_Device.NT.CoInstallers]
+AddReg=i8042prtcros_Device_CoInstaller_AddReg
+CopyFiles=i8042prtcros_Device_CoInstaller_CopyFiles
+
+[i8042prtcros_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[i8042prtcros_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+[i8042prtcros_Device.NT.Wdf]
+KmdfService =  i8042prtcros, i8042prtcros_wdfsect
+[i8042prtcros_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="" ; TODO: add ManufacturerName
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "i8042prtcros Installation Disk"
+i8042prtcros.DeviceDesc = "Chromebook Keyboard"
+i8042prtcros.SVCDESC = "i8042prtcros Service"
