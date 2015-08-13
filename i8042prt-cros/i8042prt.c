@@ -385,6 +385,8 @@ IN PIRP Irp)
 {
 	NTSTATUS Status = Irp->IoStatus.Status;
 
+	UCHAR test = __inbyte(0x60);
+
 	UNREFERENCED_PARAMETER(DeviceObject);
 
 	/* Do nothing */
@@ -462,6 +464,8 @@ i8042Power(
 IN PDEVICE_OBJECT DeviceObject,
 IN PIRP Irp)
 {
+	UCHAR test = __inbyte(0x60);
+
 	PFDO_DEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
 	PDEVICE_OBJECT LowerDevice = DeviceExtension->LowerDevice;
 
